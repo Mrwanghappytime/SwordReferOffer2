@@ -1,6 +1,5 @@
 package com.mrwang.offer2;
 
-import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
@@ -81,17 +80,4 @@ public class Solution11 {
         return b;
     }
 
-    @Test
-    public void test() {
-        int[] a = new int[10000000];
-        for (int i = 0; i < 10000000; i++) {
-            a[i] = i;
-        }
-        Random random = new Random();
-        while(true) {
-            int[] ints = spinArray(a, random.nextInt(10000000));
-            System.out.println(getMinValueOfForEach(ints) == 0);
-        }
-
-    }
 }
