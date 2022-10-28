@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 public class TakeTimeCalculate {
 
@@ -42,5 +44,25 @@ public class TakeTimeCalculate {
             System.out.println(prefix + ",use time: " + (currentTimeMillis1 - currentTimeMillis) + "ms");
             System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }).start();
+    }
+
+    public static  <T> T getResult(Object o, Method method, Object... args) throws ExecutionException, InterruptedException {
+        CountDownLatch count = new CountDownLatch(1);
+        FutureTask futureTask  = new FutureTask(() -> {
+            calculate(method.getName(), count);
+            try {
+                count.await();
+                return method.invoke(o, args);
+            } catch (IllegalAccessException e) {
+
+            } catch (InvocationTargetException e) {
+
+            } catch (InterruptedException e) {
+
+            }
+            return null;
+        });
+        new Thread(futureTask).start();
+        return (T) futureTask.get();
     }
 }
